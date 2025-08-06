@@ -1,0 +1,1972 @@
+basePath: /
+definitions:
+  dto.AppointmentResponse:
+    properties:
+      createdAt:
+        type: string
+      id:
+        type: string
+      notes:
+        type: string
+      patient:
+        $ref: '#/definitions/dto.PatientMiniResponse'
+      patientId:
+        type: string
+      scheduleAt:
+        type: string
+      status:
+        type: string
+      updatedAt:
+        type: string
+      user:
+        $ref: '#/definitions/dto.UserMiniResponse'
+      userId:
+        type: string
+    type: object
+  dto.AppointmentWithPatientResponse:
+    properties:
+      createdAt:
+        type: string
+      date:
+        type: string
+      description:
+        type: string
+      id:
+        type: string
+      patient:
+        $ref: '#/definitions/dto.PatientMiniResponse'
+      patientId:
+        type: string
+      time:
+        type: string
+      updatedAt:
+        type: string
+      userId:
+        type: string
+    type: object
+  dto.AppointmentWithUserResponse:
+    properties:
+      createdAt:
+        type: string
+      id:
+        type: string
+      notes:
+        type: string
+      patientId:
+        type: string
+      scheduleAt:
+        type: string
+      status:
+        description: "\U0001F527 tambahkan ini"
+        type: string
+      updatedAt:
+        type: string
+      user:
+        allOf:
+        - $ref: '#/definitions/dto.UserMiniResponse'
+        description: "\U0001F527 ubah dari struct anonymous jadi struct yang sudah
+          ada"
+      userId:
+        type: string
+    type: object
+  dto.AssessmentResponse:
+    properties:
+      answers:
+        additionalProperties: true
+        type: object
+      createdAt:
+        type: string
+      date:
+        type: string
+      id:
+        type: string
+      patient:
+        allOf:
+        - $ref: '#/definitions/dto.PatientMiniResponse'
+        description: dari relasi
+      patientId:
+        type: string
+      prediction:
+        allOf:
+        - $ref: '#/definitions/dto.PredictionResponse'
+        description: nullable
+      updatedAt:
+        type: string
+    type: object
+  dto.AssessmentUpdateResponse:
+    properties:
+      answers:
+        additionalProperties: true
+        type: object
+      date:
+        example: "2025-07-17T15:00:00Z"
+        type: string
+      id:
+        example: d72f8239-09e7-4b23-a897-3ef6211f6b0a
+        type: string
+      updated_at:
+        example: "2025-07-17T15:05:30Z"
+        type: string
+    type: object
+  dto.ChangeAppointmentStatusRequest:
+    properties:
+      status:
+        enum:
+        - pending
+        - done
+        - cancelled
+        type: string
+    required:
+    - status
+    type: object
+  dto.CreateAppointmentRequest:
+    properties:
+      notes:
+        type: string
+      patientId:
+        type: string
+      scheduleAt:
+        type: string
+      userId:
+        type: string
+    required:
+    - patientId
+    - scheduleAt
+    - userId
+    type: object
+  dto.CreateAppointmentResponse:
+    properties:
+      appointment:
+        $ref: '#/definitions/dto.AppointmentResponse'
+      message:
+        type: string
+    type: object
+  dto.CreateAssessmentRequest:
+    properties:
+      answers:
+        additionalProperties: true
+        description: Raw JSON
+        type: object
+      date:
+        description: sesuai format date ISO
+        type: string
+      patientId:
+        type: string
+    required:
+    - date
+    - patientId
+    type: object
+  dto.CreateAssessmentSuccessResponse:
+    properties:
+      data:
+        $ref: '#/definitions/dto.AssessmentResponse'
+      message:
+        type: string
+    type: object
+  dto.CreateMedicalRecordRequest:
+    properties:
+      diagnosis:
+        type: string
+      patientId:
+        type: string
+      treatment:
+        type: string
+      userId:
+        type: string
+    required:
+    - diagnosis
+    - patientId
+    - treatment
+    - userId
+    type: object
+  dto.CreateMedicalRecordResponse:
+    properties:
+      medicalRecord:
+        $ref: '#/definitions/dto.MedicalRecordResponse'
+      message:
+        type: string
+    type: object
+  dto.CreatePatientRequest:
+    properties:
+      address:
+        example: Jl. Merdeka No. 10
+        type: string
+      birthDate:
+        example: "2000-01-01"
+        type: string
+      emergencyContact:
+        example: "08198765432"
+        type: string
+      fullName:
+        example: Andi Saputra
+        type: string
+      gender:
+        enum:
+        - male
+        - female
+        - other
+        example: male
+        type: string
+      nik:
+        example: "3201012345678900"
+        type: string
+      phone:
+        example: "08123456789"
+        type: string
+    required:
+    - address
+    - birthDate
+    - emergencyContact
+    - fullName
+    - gender
+    - nik
+    - phone
+    type: object
+  dto.CreatePatientResponse:
+    properties:
+      message:
+        example: Patient created successfully
+        type: string
+      patient:
+        $ref: '#/definitions/dto.PatientResponse'
+    type: object
+  dto.ErrorResponse:
+    properties:
+      error:
+        example: Invalid input
+        type: string
+    type: object
+  dto.GetAssessmentByIDSuccessResponse:
+    properties:
+      data:
+        $ref: '#/definitions/dto.AssessmentResponse'
+    type: object
+  dto.LoginResponse:
+    properties:
+      email:
+        example: john@example.com
+        type: string
+      role:
+        example: admin
+        type: string
+      token:
+        example: jwt-token
+        type: string
+    type: object
+  dto.LoginUserRequest:
+    properties:
+      email:
+        example: user@example.com
+        type: string
+      password:
+        example: password123
+        type: string
+    required:
+    - email
+    - password
+    type: object
+  dto.MedicalRecordMiniPatient:
+    properties:
+      fullName:
+        type: string
+      id:
+        type: string
+    type: object
+  dto.MedicalRecordMiniUser:
+    properties:
+      fullName:
+        type: string
+      id:
+        type: string
+      role:
+        type: string
+    type: object
+  dto.MedicalRecordResponse:
+    properties:
+      createdAt:
+        type: string
+      diagnosis:
+        type: string
+      id:
+        type: string
+      patient:
+        $ref: '#/definitions/dto.MedicalRecordMiniPatient'
+      patientId:
+        type: string
+      treatment:
+        type: string
+      updatedAt:
+        type: string
+      user:
+        $ref: '#/definitions/dto.MedicalRecordMiniUser'
+      userId:
+        type: string
+    type: object
+  dto.MessageDeleteAppointmentResponse:
+    properties:
+      message:
+        type: string
+    type: object
+  dto.MessageDeleteAssesmentResponse:
+    properties:
+      message:
+        type: string
+    type: object
+  dto.MessageDeleteMedicalRecordResponse:
+    properties:
+      message:
+        type: string
+    type: object
+  dto.MessageDeletePatientResponse:
+    properties:
+      message:
+        example: Patient deleted successfully
+        type: string
+    type: object
+  dto.MessageDeletePredictionResponse:
+    properties:
+      message:
+        type: string
+    type: object
+  dto.MessageDeleteResponse:
+    properties:
+      message:
+        example: User Deleted Successfully
+        type: string
+    type: object
+  dto.MessageUpdateStatusAppoinmentResponse:
+    properties:
+      message:
+        type: string
+    type: object
+  dto.PaginatedAppointmentsResponse:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/dto.AppointmentResponse'
+        type: array
+      limit:
+        type: integer
+      page:
+        type: integer
+      total:
+        type: integer
+      totalPages:
+        type: integer
+    type: object
+  dto.PaginatedAssessmentsResponse:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/dto.AssessmentResponse'
+        type: array
+      limit:
+        type: integer
+      page:
+        type: integer
+      total:
+        type: integer
+      totalPages:
+        type: integer
+    type: object
+  dto.PaginatedMedicalRecordsResponse:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/dto.MedicalRecordResponse'
+        type: array
+      limit:
+        type: integer
+      page:
+        type: integer
+      total:
+        type: integer
+      totalPages:
+        type: integer
+    type: object
+  dto.PaginatedPatientsResponse:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/dto.PatientResponse'
+        type: array
+      limit:
+        example: 10
+        type: integer
+      page:
+        example: 1
+        type: integer
+      total:
+        example: 100
+        type: integer
+      totalPages:
+        example: 10
+        type: integer
+    type: object
+  dto.PaginatedPredictionsResponse:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/dto.PredictionResponse'
+        type: array
+      limit:
+        type: integer
+      page:
+        type: integer
+      total:
+        type: integer
+      totalPages:
+        type: integer
+    type: object
+  dto.PaginatedUsersResponse:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/dto.UserResponse'
+        type: array
+      limit:
+        example: 10
+        type: integer
+      page:
+        example: 1
+        type: integer
+      total:
+        example: 100
+        type: integer
+      totalPages:
+        example: 10
+        type: integer
+    type: object
+  dto.PatientMiniResponse:
+    properties:
+      birthDate:
+        type: string
+      fullName:
+        type: string
+      gender:
+        type: string
+      id:
+        type: string
+    type: object
+  dto.PatientResponse:
+    properties:
+      address:
+        example: Jl. Merdeka No. 10
+        type: string
+      birthDate:
+        example: "2000-01-01"
+        type: string
+      emergencyContact:
+        example: "08198765432"
+        type: string
+      fullName:
+        example: Andi Saputra
+        type: string
+      gender:
+        example: male
+        type: string
+      id:
+        example: patient-001-ABC12345
+        type: string
+      nik:
+        example: "3201012345678900"
+        type: string
+      phone:
+        example: "08123456789"
+        type: string
+    type: object
+  dto.PredictionResponse:
+    properties:
+      assessmentId:
+        type: string
+      createdAt:
+        type: string
+      id:
+        type: string
+      probabilityScore:
+        type: number
+      resultLabel:
+        type: string
+      updatedAt:
+        type: string
+    type: object
+  dto.RegisterUserRequest:
+    properties:
+      email:
+        example: john@example.com
+        type: string
+      fullName:
+        example: John Doe
+        type: string
+      password:
+        example: password123
+        type: string
+      role:
+        example: admin
+        type: string
+    type: object
+  dto.RegisterUserResponse:
+    properties:
+      message:
+        example: User Registered
+        type: string
+      user:
+        $ref: '#/definitions/dto.UserResponse'
+    type: object
+  dto.UpdateAppointmentRequest:
+    properties:
+      notes:
+        description: opsional
+        type: string
+      scheduleAt:
+        description: opsional
+        type: string
+    type: object
+  dto.UpdateAppointmentResponse:
+    properties:
+      message:
+        type: string
+      updatedFields:
+        items:
+          $ref: '#/definitions/dto.UpdatedField'
+        type: array
+    type: object
+  dto.UpdateAssessmentRequest:
+    properties:
+      answers:
+        additionalProperties: true
+        type: object
+      date:
+        type: string
+    required:
+    - date
+    type: object
+  dto.UpdateAssessmentSuccessResponse:
+    properties:
+      data:
+        $ref: '#/definitions/dto.AssessmentUpdateResponse'
+      message:
+        example: Assessment berhasil diperbarui
+        type: string
+    type: object
+  dto.UpdateMedicalRecordRequest:
+    properties:
+      diagnosis:
+        type: string
+      patientId:
+        type: string
+      treatment:
+        type: string
+      userId:
+        type: string
+    required:
+    - diagnosis
+    - patientId
+    - treatment
+    - userId
+    type: object
+  dto.UpdateMedicalRecordResponse:
+    properties:
+      message:
+        type: string
+      updatedFields:
+        items:
+          $ref: '#/definitions/dto.UpdatedField'
+        type: array
+    type: object
+  dto.UpdatePatientInput:
+    properties:
+      address:
+        example: Jl. Merpati No. 123
+        type: string
+      birthDate:
+        example: "1980-12-31"
+        type: string
+      emergencyContact:
+        example: "081987654321"
+        type: string
+      fullName:
+        example: Budi Santoso
+        type: string
+      gender:
+        example: male
+        type: string
+      nik:
+        example: "3201012345678901"
+        type: string
+      phone:
+        example: "081234567891"
+        type: string
+    type: object
+  dto.UpdatePredictionRequest:
+    properties:
+      probabilityScore:
+        maximum: 1
+        minimum: 0
+        type: number
+      resultLabel:
+        type: string
+    required:
+    - probabilityScore
+    - resultLabel
+    type: object
+  dto.UpdateUserInput:
+    properties:
+      email:
+        type: string
+      fullName:
+        type: string
+      password:
+        minLength: 6
+        type: string
+      role:
+        enum:
+        - admin
+        - doctor
+        - staff
+        type: string
+    type: object
+  dto.UpdatedField:
+    properties:
+      field:
+        type: string
+      value: {}
+    type: object
+  dto.UserMiniResponse:
+    properties:
+      email:
+        description: "\U0001F527 optional: jika kamu ingin tampilkan email juga"
+        type: string
+      fullName:
+        type: string
+      id:
+        type: string
+      role:
+        type: string
+    type: object
+  dto.UserResponse:
+    properties:
+      email:
+        example: john@example.com
+        type: string
+      fullName:
+        example: John Doe
+        type: string
+      id:
+        example: admin-001-a1b2c3d4
+        type: string
+      role:
+        example: admin
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: API untuk sistem informasi klinik kesehatan mental
+  title: Klinik API
+  version: "1.0"
+paths:
+  /api/appointments:
+    get:
+      consumes:
+      - application/json
+      description: Get paginated list of appointments with optional search (by patient
+        name), status filter, and sorting.
+      parameters:
+      - default: 1
+        description: Page number
+        in: query
+        name: page
+        type: integer
+      - default: 10
+        description: Items per page
+        in: query
+        name: limit
+        type: integer
+      - description: Search by patient full name
+        in: query
+        name: search
+        type: string
+      - description: Filter by status (pending, done, cancelled)
+        in: query
+        name: status
+        type: string
+      - default: schedule_at
+        description: Sort by field (e.g. schedule_at, created_at)
+        in: query
+        name: sort
+        type: string
+      - default: asc
+        description: Sort order (asc or desc)
+        in: query
+        name: order
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.PaginatedAppointmentsResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get all appointments
+      tags:
+      - Appointments
+    post:
+      consumes:
+      - application/json
+      description: Create a new appointment between patient and doctor/staff.
+      parameters:
+      - description: Appointment input data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateAppointmentRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/dto.CreateAppointmentResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Create a new appointment
+      tags:
+      - Appointments
+  /api/appointments/{id}:
+    delete:
+      description: Delete an appointment by its ID
+      parameters:
+      - description: Appointment ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.MessageDeleteAppointmentResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Delete an appointment
+      tags:
+      - Appointments
+    get:
+      consumes:
+      - application/json
+      description: Retrieve detailed information of an appointment by its ID, including
+        patient and doctor/staff info.
+      parameters:
+      - description: Appointment ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.AppointmentResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get appointment by ID
+      tags:
+      - Appointments
+    put:
+      consumes:
+      - application/json
+      description: Update appointment schedule or notes by ID.
+      parameters:
+      - description: Appointment ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Updated appointment data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpdateAppointmentRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.UpdateAppointmentResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Update an appointment
+      tags:
+      - Appointments
+  /api/appointments/{id}/statusAppoinment:
+    patch:
+      consumes:
+      - application/json
+      description: Ubah status janji temu berdasarkan ID appointment menjadi pending,
+        done, atau cancelled
+      parameters:
+      - description: Appointment ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Status janji temu baru
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/dto.ChangeAppointmentStatusRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.MessageUpdateStatusAppoinmentResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Ubah status janji temu
+      tags:
+      - Appointments
+  /api/appointments/appoinmentUser/{userId}:
+    get:
+      description: Mengambil semua janji temu berdasarkan ID user (dokter/staff),
+        beserta informasi user yang membuat janji temu
+      parameters:
+      - description: User ID
+        in: path
+        name: userId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/dto.AppointmentWithUserResponse'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      summary: Get appointments by user ID
+      tags:
+      - Appointments
+  /api/appointments/appointmentPatient/{patientId}:
+    get:
+      description: Mengambil semua janji temu berdasarkan ID pasien, beserta informasi
+        pasien yang terkait
+      parameters:
+      - description: Patient ID
+        in: path
+        name: patientId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/dto.AppointmentWithPatientResponse'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      summary: Get appointments by patient ID
+      tags:
+      - Appointments
+  /api/assessments:
+    get:
+      consumes:
+      - application/json
+      description: Get paginated list of assessments, with optional filter by patient
+        ID
+      parameters:
+      - default: 1
+        description: Page number
+        in: query
+        name: page
+        type: integer
+      - default: 10
+        description: Items per page
+        in: query
+        name: limit
+        type: integer
+      - description: Filter by patient ID
+        in: query
+        name: patientId
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.PaginatedAssessmentsResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get all assessments
+      tags:
+      - Assessments
+    post:
+      consumes:
+      - application/json
+      description: Membuat data assessment baru untuk pasien tertentu
+      parameters:
+      - description: Data assessment baru
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateAssessmentRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/dto.CreateAssessmentSuccessResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Buat assessment baru
+      tags:
+      - Assessments
+  /api/assessments/{id}:
+    delete:
+      description: Menghapus assessment dari database berdasarkan ID yang diberikan
+      parameters:
+      - description: Assessment ID
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.MessageDeleteAssesmentResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Menghapus assessment berdasarkan ID
+      tags:
+      - Assessments
+    get:
+      description: Mengambil detail satu assessment berdasarkan ID, termasuk data
+        pasien (mini) dan hasil prediksi jika ada
+      parameters:
+      - description: Assessment ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.GetAssessmentByIDSuccessResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Mendapatkan assessment berdasarkan ID
+      tags:
+      - Assessments
+    put:
+      consumes:
+      - application/json
+      description: Memperbarui tanggal dan jawaban assessment, serta memperbarui waktu
+        terakhir diperbarui (updatedAt)
+      parameters:
+      - description: ID Assessment
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Data assessment yang diperbarui
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpdateAssessmentRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.UpdateAssessmentSuccessResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Memperbarui assessment berdasarkan ID
+      tags:
+      - Assessments
+  /api/assessments/patient/{patientId}:
+    get:
+      description: Mengambil semua data assessment yang dimiliki oleh pasien tertentu,
+        termasuk hasil prediksi jika tersedia
+      parameters:
+      - description: Patient ID
+        in: path
+        name: patientId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/dto.AssessmentResponse'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Mendapatkan semua assessment berdasarkan ID pasien
+      tags:
+      - Assessments
+  /api/medical-records:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve a paginated list of medical records. Supports filtering
+        by patientId and userId.
+      parameters:
+      - default: 1
+        description: Page number
+        in: query
+        name: page
+        type: integer
+      - default: 10
+        description: Items per page
+        in: query
+        name: limit
+        type: integer
+      - description: Filter by patient ID
+        in: query
+        name: patientId
+        type: string
+      - description: Filter by user ID
+        in: query
+        name: userId
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.PaginatedMedicalRecordsResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get all medical records (with pagination and optional filters)
+      tags:
+      - MedicalRecords
+    post:
+      consumes:
+      - application/json
+      description: Adds a new medical record linked to a patient and user
+      parameters:
+      - description: Medical Record input data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateMedicalRecordRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/dto.CreateMedicalRecordResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Create a new medical record
+      tags:
+      - MedicalRecords
+  /api/medical-records/{id}:
+    delete:
+      description: Soft delete a medical record by its ID
+      parameters:
+      - description: Medical Record ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.MessageDeleteMedicalRecordResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Delete a medical record
+      tags:
+      - MedicalRecords
+    get:
+      consumes:
+      - application/json
+      description: Retrieve detailed information of a medical record by its ID, including
+        patient and user (doctor/staff) info.
+      parameters:
+      - description: Medical Record ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.MedicalRecordResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get medical record by ID
+      tags:
+      - MedicalRecords
+    put:
+      consumes:
+      - application/json
+      description: Update a medical record's patient, user, diagnosis, or treatment.
+      parameters:
+      - description: Medical Record ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Medical Record Data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpdateMedicalRecordRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.UpdateMedicalRecordResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Update medical record by ID
+      tags:
+      - MedicalRecords
+  /api/patients:
+    get:
+      consumes:
+      - application/json
+      description: Get paginated list of patients with optional search, gender filter,
+        and sorting
+      parameters:
+      - default: 1
+        description: Page number
+        in: query
+        name: page
+        type: integer
+      - default: 10
+        description: Items per page
+        in: query
+        name: limit
+        type: integer
+      - description: Search by full name or NIK
+        in: query
+        name: search
+        type: string
+      - description: Filter by gender (male, female, other)
+        in: query
+        name: gender
+        type: string
+      - default: created_at
+        description: Sort by field (e.g. full_name, created_at)
+        in: query
+        name: sort
+        type: string
+      - default: desc
+        description: Sort order (asc or desc)
+        in: query
+        name: order
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.PaginatedPatientsResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get all patients
+      tags:
+      - Patients
+    post:
+      consumes:
+      - application/json
+      description: Register a new patient with full name, NIK, birth date, gender,
+        phone, address, and emergency contact
+      parameters:
+      - description: Patient input data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreatePatientRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/dto.CreatePatientResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Create a new patient
+      tags:
+      - Patients
+  /api/patients/{id}:
+    delete:
+      description: Delete a patient record by their ID. Only accessible by authorized
+        roles.
+      parameters:
+      - description: Patient ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.MessageDeletePatientResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Delete a patient
+      tags:
+      - Patients
+    get:
+      consumes:
+      - application/json
+      description: Retrieve detailed information of a patient by their ID
+      parameters:
+      - description: Patient ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.PatientResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get patient by ID
+      tags:
+      - Patients
+    put:
+      consumes:
+      - application/json
+      description: Update a patient’s information by ID. Only fields in the request
+        body will be updated.
+      parameters:
+      - description: Patient ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Patient fields to update
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpdatePatientInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.PatientResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Update patient data
+      tags:
+      - Patients
+  /api/predictions:
+    get:
+      consumes:
+      - application/json
+      description: Get paginated list of predictions, with optional filters and sorting
+      parameters:
+      - default: 1
+        description: Page number
+        in: query
+        name: page
+        type: integer
+      - default: 10
+        description: Items per page
+        in: query
+        name: limit
+        type: integer
+      - description: Filter by result label
+        in: query
+        name: resultLabel
+        type: string
+      - default: created_at
+        description: Sort by field (e.g. created_at, probability_score)
+        in: query
+        name: sortBy
+        type: string
+      - default: desc
+        description: 'Sort order: asc or desc'
+        in: query
+        name: sortOrder
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.PaginatedPredictionsResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get all predictions
+      tags:
+      - Predictions
+  /api/predictions/{id}:
+    delete:
+      description: Menghapus data prediksi dari database berdasarkan ID yang diberikan
+      parameters:
+      - description: Prediction ID
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.MessageDeletePredictionResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Menghapus prediksi berdasarkan ID
+      tags:
+      - Predictions
+    get:
+      consumes:
+      - application/json
+      description: Ambil hasil prediksi berdasarkan prediction ID
+      parameters:
+      - description: Prediction ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.PredictionResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get prediction by ID
+      tags:
+      - Predictions
+    post:
+      consumes:
+      - application/json
+      description: Mengirim data assessment ke model ML, lalu menyimpan hasil prediksi
+        ke database
+      parameters:
+      - description: Assessment ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/dto.PredictionResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Membuat prediksi kesehatan mental dari assessment
+      tags:
+      - Predictions
+    put:
+      consumes:
+      - application/json
+      description: Memperbarui data prediksi (result label dan skor probabilitas)
+        berdasarkan ID
+      parameters:
+      - description: Prediction ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Data prediksi yang diperbarui
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpdatePredictionRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.PredictionResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Update prediksi berdasarkan ID
+      tags:
+      - Predictions
+  /api/predictions/assessment/{assessment_id}:
+    get:
+      consumes:
+      - application/json
+      description: Ambil hasil prediksi berdasarkan assessment ID
+      parameters:
+      - description: Assessment ID
+        in: path
+        name: assessment_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.PredictionResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get prediction by assessment ID
+      tags:
+      - Predictions
+  /api/users/:
+    get:
+      consumes:
+      - application/json
+      description: Get paginated list of users with optional search, role filter,
+        and sorting. Only accessible by admin.
+      parameters:
+      - default: 1
+        description: Page number
+        in: query
+        name: page
+        type: integer
+      - default: 10
+        description: Items per page
+        in: query
+        name: limit
+        type: integer
+      - description: Search by name or email
+        in: query
+        name: search
+        type: string
+      - description: Filter by role (admin, doctor, staff)
+        in: query
+        name: role
+        type: string
+      - default: created_at
+        description: Sort by field (e.g. full_name, email, created_at)
+        in: query
+        name: sort
+        type: string
+      - default: desc
+        description: Sort order (asc or desc)
+        in: query
+        name: order
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.PaginatedUsersResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get all users
+      tags:
+      - Users
+  /api/users/{id}:
+    delete:
+      description: Delete a user by their ID. Only accessible by admin.
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.MessageDeleteResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Delete user by ID
+      tags:
+      - Users
+    get:
+      consumes:
+      - application/json
+      description: Retrieve a single user by their ID. Only accessible by admin.
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.UserResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get user by ID
+      tags:
+      - Users
+    put:
+      consumes:
+      - application/json
+      description: Update user information by ID. Can update fullName, email, password,
+        and role. Requires authentication.
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Updated user data
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpdateUserInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.UserResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "404":
+          description: User Not Found
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "500":
+          description: Failed to Update User
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Update user by ID
+      tags:
+      - Users
+  /api/users/login:
+    post:
+      consumes:
+      - application/json
+      description: Authenticate user and return JWT token
+      parameters:
+      - description: Login credentials
+        in: body
+        name: credentials
+        required: true
+        schema:
+          $ref: '#/definitions/dto.LoginUserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.LoginResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      summary: Login user
+      tags:
+      - Users
+  /api/users/register:
+    post:
+      consumes:
+      - application/json
+      description: Create a new user with full name, email, password, and role
+      parameters:
+      - description: Register input
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.RegisterUserRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/dto.RegisterUserResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      summary: Register new user
+      tags:
+      - Users
+securityDefinitions:
+  BearerAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
