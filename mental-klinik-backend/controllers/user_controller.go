@@ -206,20 +206,21 @@ func GetAllUsers(c *gin.Context) {
 // @Failure 404 {object} dto.ErrorResponse
 // @Router /api/users/{id} [get]
 func GetUserByID(c *gin.Context) {
-	id := c.Param("id")
-	var user models.User
-	if err := database.DB.First(&user, id).Error; err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": "User Not Found"})
-		return
-	}
+    id := c.Param("id")
+    var user models.User
+    if err := database.DB.First(&user, "id = ?", id).Error; err != nil {
+        c.JSON(http.StatusNotFound, gin.H{"error": "User Not Found"})
+        return
+    }
 
-	c.JSON(http.StatusOK, dto.UserResponse{
-		ID:       user.ID,
-		FullName: user.FullName,
-		Email:    user.Email,
-		Role:     user.Role,
-	})
+    c.JSON(http.StatusOK, dto.UserResponse{
+        ID:       user.ID,
+        FullName: user.FullName,
+        Email:    user.Email,
+        Role:     user.Role,
+    })
 }
+
 
 // UpdateUser godoc
 // @Summary Update user by ID
@@ -238,51 +239,55 @@ func GetUserByID(c *gin.Context) {
 // @Failure 500 {object} dto.ErrorResponse "Failed to Update User"
 // @Router /api/users/{id} [put]
 func UpdateUser(c *gin.Context) {
-	id := c.Param("id")
-	var user models.User
-	if err := database.DB.First(&user, id).Error; err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": "User Not Found"})
-		return
-	}
+    id := c.Param("id")
+    var user models.User
 
-	var input dto.UpdateUserInput
-	if err := c.ShouldBindJSON(&input); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
+    // Cari user dulu
+    if err := database.DB.Where("id = ?", id).First(&user).Error; err != nil {
+        c.JSON(http.StatusNotFound, gin.H{"error": "User Not Found"})
+        return
+    }
 
-	// Optional: Hash New Password if Provided
-	if input.Password != "" {
-		hashed, err := utils.HashPassword(input.Password)
-		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to Hash Password"})
-			return
-		}
-		user.Password = hashed
-	}
+    // Bind request body ke struct input
+    var input dto.UpdateUserInput
+    if err := c.ShouldBindJSON(&input); err != nil {
+        c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid input"})
+        return
+    }
 
-	if input.FullName != "" {
-		user.FullName = input.FullName
-	}
-	if input.Email != "" {
-		user.Email = input.Email
-	}
-	if input.Role != "" {
-		user.Role = input.Role
-	}
+    // Optional: Hash New Password if Provided
+    if input.Password != "" {
+        hashed, err := utils.HashPassword(input.Password)
+        if err != nil {
+            c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to Hash Password"})
+            return
+        }
+        user.Password = hashed
+    }
 
-	if err := database.DB.Save(&user).Error; err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to Update User"})
-		return
-	}
+    if input.FullName != "" {
+        user.FullName = input.FullName
+    }
+    if input.Email != "" {
+        user.Email = input.Email
+    }
+    if input.Role != "" {
+        user.Role = input.Role
+    }
 
-	c.JSON(http.StatusOK, dto.UserResponse{
-		ID:       user.ID,
-		FullName: user.FullName,
-		Email:    user.Email,
-		Role:     user.Role,
-	})
+    if err := database.DB.Save(&user).Error; err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to Update User"})
+        return
+    }
+
+    c.JSON(http.StatusOK, dto.UserResponse{
+        ID:       user.ID,
+        FullName: user.FullName,
+        Email:    user.Email,
+        Role:     user.Role,
+    })
 }
+
 
 // DeleteUser godoc
 // @Summary Delete user by ID
@@ -297,12 +302,12 @@ func UpdateUser(c *gin.Context) {
 // @Failure 500 {object} dto.ErrorResponse
 // @Router /api/users/{id} [delete]
 func DeleteUser(c *gin.Context) {
-	id := c.Param("id")
+    id := c.Param("id")
 
-	if err := database.DB.Delete(&models.User{}, id).Error; err != nil {
-		c.JSON(http.StatusInternalServerError, dto.ErrorResponse{Error: "Failed to Delete User"})
-		return
-	}
+    if err := database.DB.Where("id = ?", id).Delete(&models.User{}).Error; err != nil {
+        c.JSON(http.StatusInternalServerError, dto.ErrorResponse{Error: "Failed to Delete User"})
+        return
+    }
 
-	c.JSON(http.StatusOK, dto.MessageDeleteResponse{Message: "User Deleted Successfully"})
+    c.JSON(http.StatusOK, dto.MessageDeleteResponse{Message: "User Deleted Successfully"})
 }

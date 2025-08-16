@@ -7,10 +7,16 @@ import Hero from '@/components/Hero'
 import Sidebar from '@/components/Sidebar'
 import InfoCards from '@/components/InfoCards'
 import Footer from '@/components/Footer'
+import MentalHealthStats from '@/components/MentalHealthStats'
+import EducationalSection from '@/components/EducationalSection'
+import DailyTips from '@/components/DailyTips'
+import SupportResources from '@/components/SupportResources'
+import MentalHealthChart from '@/components/MentalHealthChart'
 
 export default function HomePage() {
   const router = useRouter()
   const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
 
   useEffect(() => {
     const token = Cookies.get('token')
@@ -25,11 +31,19 @@ export default function HomePage() {
 
   return (
     <div className="flex">
-      <Sidebar />
-      <main className="ml-64 flex-1 p-8 bg-blue-50 min-h-screen">
+      <Sidebar onToggle={setSidebarCollapsed} />
+      <main
+        className={`transition-all duration-300 ${
+          sidebarCollapsed ? 'ml-16' : 'ml-64'
+        } flex-1 p-8 bg-blue-50 min-h-screen`}
+      >
         <Hero />
         <InfoCards />
-        {/* Kamu bisa tambahkan section konten utama di sini */}
+        <MentalHealthStats />
+        <MentalHealthChart />
+        <EducationalSection />
+        <DailyTips />
+        <SupportResources />
         <Footer />
       </main>
     </div>
