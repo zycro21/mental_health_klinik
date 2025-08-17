@@ -7,7 +7,7 @@ import { motion } from 'framer-motion'
 
 const menuItems = [
   { name: 'User', icon: <FaUser />, href: '/dashboard/user' },
-  { name: 'Patient', icon: <FaProcedures />, href: '/patient' },
+  { name: 'Patient', icon: <FaProcedures />, href: '/dashboard/patient' },
   { name: 'Appointment', icon: <FaCalendarAlt />, href: '/appointment' },
   { name: 'Assessment', icon: <FaBrain />, href: '/assessment' },
   { name: 'Prediction', icon: <FaBrain />, href: '/prediction' },

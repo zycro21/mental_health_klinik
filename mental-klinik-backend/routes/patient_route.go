@@ -16,7 +16,7 @@ func PatientRoutes(r *gin.Engine) {
 
 	// Only admin can get full list of patients
 	protected.POST("/", controllers.CreatePatient)
-	protected.GET("/", middlewares.AuthorizeRole("admin, staff"), controllers.GetAllPatients)
+	protected.GET("/", middlewares.AuthorizeRole("admin", "staff"), controllers.GetAllPatients)
 
 	// Get by ID, Update, Delete (dapat dibuka untuk admin & staff)
 	protected.GET("/:id", middlewares.AuthorizeRole("admin", "staff"), controllers.GetPatientByID)
