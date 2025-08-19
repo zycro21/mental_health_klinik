@@ -50,7 +50,7 @@ export default function AssessmentDashboard() {
     setLoading(true);
     try {
       const token = Cookies.get("token");
-      const res = await api.get("/api/assessments", {
+      const res = await api.get("/api/assessments/", {
         params: { page, limit: 10, patientId },
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -66,6 +66,24 @@ export default function AssessmentDashboard() {
   };
 
   if (!isAuthenticated) return null;
+
+  const handleDelete = async (id: string) => {
+    if (!confirm("Yakin ingin menghapus assessment ini?")) return;
+
+    try {
+      const token = Cookies.get("token");
+      await api.delete(`/api/assessments/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      // refresh list setelah hapus
+      setAssessments((prev) => prev.filter((a) => a.id !== id));
+      alert("Assessment berhasil dihapus");
+    } catch (err: any) {
+      console.error("Delete failed:", err);
+      alert(err.response?.data?.error || "Gagal menghapus assessment");
+    }
+  };
 
   return (
     <div className="flex">
@@ -152,6 +170,12 @@ export default function AssessmentDashboard() {
                         className="px-3 py-1 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600"
                       >
                         Edit
+                      </button>
+                      <button
+                        onClick={() => handleDelete(a.id)}
+                        className="px-3 py-1 bg-red-500 text-white rounded-lg hover:bg-red-600"
+                      >
+                        Delete
                       </button>
                     </td>
                   </tr>

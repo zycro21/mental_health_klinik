@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
+import api from "@/lib/axios";
 
 interface Patient {
   id: string;
@@ -23,20 +24,18 @@ export default function AddAssessmentPage() {
     const fetchPatients = async () => {
       try {
         const token = Cookies.get("token");
-        const res = await fetch("http://localhost:8080/api/patients?limit=50", {
+
+        const res = await api.get("/api/patients/", {
+          params: { limit: 50 },
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
 
-        const data = await res.json();
-        if (res.ok) {
-          setPatients(data.data || []);
-        } else {
-          console.error("Gagal load patients:", data.error);
-        }
-      } catch (err) {
-        console.error("Error fetch patients", err);
+        setPatients(res.data.data || []);
+      } catch (err: any) {
+        console.error("Error fetch patients:", err);
+        setError("Gagal memuat daftar pasien");
       }
     };
     fetchPatients();
@@ -51,7 +50,7 @@ export default function AddAssessmentPage() {
       let parsedAnswers;
       try {
         parsedAnswers = JSON.parse(answers);
-      } catch (err) {
+      } catch {
         setError("Format answers harus JSON yang valid.");
         setLoading(false);
         return;
@@ -59,28 +58,22 @@ export default function AddAssessmentPage() {
 
       const token = Cookies.get("token");
 
-      const res = await fetch("http://localhost:8080/api/assessments", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
+      await api.post(
+        "/api/assessments/",
+        {
           patientId,
           date,
           answers: parsedAnswers,
-        }),
-      });
-
-      const data = await res.json();
-      if (!res.ok) {
-        throw new Error(data.error || "Gagal membuat assessment");
-      }
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
 
       alert("Assessment berhasil dibuat");
-      router.push("/assessments");
+      router.push("/dashboard/assessment");
     } catch (err: any) {
-      setError(err.message);
+      setError(err.response?.data?.error || "Gagal membuat assessment");
     } finally {
       setLoading(false);
     }
@@ -131,7 +124,7 @@ export default function AddAssessmentPage() {
             required
           />
           <small className="text-gray-500">
-            Contoh: {'{ "question1": "jawaban A", "question2": "jawaban B" }'}
+            Contoh: {"{ \"question1\": \"jawaban A\", \"question2\": \"jawaban B\" }"}
           </small>
         </div>
 
