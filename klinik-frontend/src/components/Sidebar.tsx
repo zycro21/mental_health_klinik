@@ -9,9 +9,9 @@ const menuItems = [
   { name: 'User', icon: <FaUser />, href: '/dashboard/user' },
   { name: 'Patient', icon: <FaProcedures />, href: '/dashboard/patient' },
   { name: 'Appointment', icon: <FaCalendarAlt />, href: '/dashboard/appointment' },
-  { name: 'Assessment', icon: <FaBrain />, href: '/assessment' },
-  { name: 'Prediction', icon: <FaBrain />, href: '/prediction' },
-  { name: 'Medical Record', icon: <FaNotesMedical />, href: '/medical-record' },
+  { name: 'Assessment', icon: <FaBrain />, href: '/dashboard/assessment' },
+  { name: 'Prediction', icon: <FaBrain />, href: '/dashboard/prediction' },
+  { name: 'Medical Record', icon: <FaNotesMedical />, href: '/dashboard/medical-record' },
 ]
 
 export default function Sidebar() {
