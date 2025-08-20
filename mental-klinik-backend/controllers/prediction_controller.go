@@ -282,42 +282,45 @@ func GetPredictionByAssessmentID(c *gin.Context) {
 // @Failure 500 {object} dto.ErrorResponse
 // @Router /api/predictions/{id} [put]
 func UpdatePredictionByID(c *gin.Context) {
-	id := c.Param("id")
+    id := c.Param("id")
 
-	var req dto.UpdatePredictionRequest
-	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, dto.ErrorResponse{Error: "Data input tidak valid"})
-		return
-	}
+    // Validasi request
+    var req dto.UpdatePredictionRequest
+    if err := c.ShouldBindJSON(&req); err != nil {
+        c.JSON(http.StatusBadRequest, dto.ErrorResponse{Error: "Data input tidak valid"})
+        return
+    }
 
-	var prediction models.Prediction
-	if err := database.DB.First(&prediction, "id = ?", id).Error; err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound) {
-			c.JSON(http.StatusNotFound, dto.ErrorResponse{Error: "Prediksi tidak ditemukan"})
-			return
-		}
-		c.JSON(http.StatusInternalServerError, dto.ErrorResponse{Error: "Gagal mengambil data prediksi"})
-		return
-	}
+    // Cari prediksi
+    var prediction models.Prediction
+    if err := database.DB.First(&prediction, "id = ?", id).Error; err != nil {
+        if errors.Is(err, gorm.ErrRecordNotFound) {
+            c.JSON(http.StatusNotFound, dto.ErrorResponse{Error: "Prediksi tidak ditemukan"})
+            return
+        }
+        c.JSON(http.StatusInternalServerError, dto.ErrorResponse{Error: "Gagal mengambil data prediksi"})
+        return
+    }
 
-	// Update field
-	prediction.ResultLabel = req.ResultLabel
-	prediction.ProbabilityScore = req.ProbabilityScore
+    // Update field
+    prediction.ResultLabel = req.ResultLabel
+    prediction.ProbabilityScore = req.ProbabilityScore
 
-	if err := database.DB.Save(&prediction).Error; err != nil {
-		c.JSON(http.StatusInternalServerError, dto.ErrorResponse{Error: "Gagal memperbarui prediksi"})
-		return
-	}
+    if err := database.DB.Save(&prediction).Error; err != nil {
+        c.JSON(http.StatusInternalServerError, dto.ErrorResponse{Error: "Gagal memperbarui prediksi"})
+        return
+    }
 
-	response := dto.PredictionResponse{
-		ID:               prediction.ID,
-		AssessmentID:     prediction.AssessmentID,
-		ResultLabel:      prediction.ResultLabel,
-		ProbabilityScore: prediction.ProbabilityScore,
-		UpdatedAt:        prediction.UpdatedAt,
-	}
+    response := dto.PredictionResponse{
+        ID:               prediction.ID,
+        AssessmentID:     prediction.AssessmentID,
+        ResultLabel:      prediction.ResultLabel,
+        ProbabilityScore: prediction.ProbabilityScore,
+        CreatedAt:        prediction.CreatedAt,
+        UpdatedAt:        prediction.UpdatedAt,
+    }
 
-	c.JSON(http.StatusOK, response)
+    c.JSON(http.StatusOK, response)
 }
 
 // DeletePredictionByID godoc

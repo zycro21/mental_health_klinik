@@ -142,7 +142,8 @@ export default function PredictionDashboard() {
                 </tr>
               )}
 
-              {!loading && predictions.length > 0 &&
+              {!loading &&
+                predictions.length > 0 &&
                 predictions.map((p) => (
                   <tr key={p.id} className="hover:bg-blue-50 transition-colors">
                     <td className="py-3 px-4">{p.assessmentId}</td>
@@ -150,7 +151,7 @@ export default function PredictionDashboard() {
                       {p.resultLabel}
                     </td>
                     <td className="py-3 px-4">
-                      {(p.probabilityScore * 100).toFixed(2)}%
+                      {p.probabilityScore.toFixed(2)}%
                     </td>
                     <td className="py-3 px-4">
                       {new Date(p.createdAt).toLocaleString()}
@@ -171,7 +172,9 @@ export default function PredictionDashboard() {
                       <button
                         onClick={async () => {
                           if (
-                            confirm("Are you sure you want to delete this prediction?")
+                            confirm(
+                              "Are you sure you want to delete this prediction?"
+                            )
                           ) {
                             try {
                               const token = Cookies.get("token");

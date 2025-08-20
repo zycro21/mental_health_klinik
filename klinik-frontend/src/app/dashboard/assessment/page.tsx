@@ -150,11 +150,12 @@ export default function AssessmentDashboard() {
                     </td>
                     <td className="py-3 px-4">
                       {a.prediction
-                        ? `${a.prediction.resultLabel} (${(
-                            a.prediction.probabilityScore * 100
-                          ).toFixed(1)}%)`
+                        ? `${
+                            a.prediction.resultLabel
+                          } (${a.prediction.probabilityScore.toFixed(1)}%)`
                         : "N/A"}
                     </td>
+
                     <td className="py-3 px-4">
                       {Object.keys(a.answers).length} answers
                     </td>
