@@ -62,7 +62,7 @@ export default function AddAssessmentPage() {
         "/api/assessments/",
         {
           patientId,
-          date,
+          date: new Date(date).toISOString(), // ⬅️ ubah di sini
           answers: parsedAnswers,
         },
         {
@@ -124,7 +124,7 @@ export default function AddAssessmentPage() {
             required
           />
           <small className="text-gray-500">
-            Contoh: {"{ \"question1\": \"jawaban A\", \"question2\": \"jawaban B\" }"}
+            Contoh: {'{ "question1": "jawaban A", "question2": "jawaban B" }'}
           </small>
         </div>
 

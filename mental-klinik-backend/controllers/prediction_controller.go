@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"net/http"
 	"time"
+	"io"
 
 	"errors"
 	"gorm.io/gorm"
@@ -38,6 +39,7 @@ func PredictMentalHealth(c *gin.Context) {
 	// Cek apakah assessment ada
 	var assessment models.Assessment
 	if err := database.DB.Preload("Patient").First(&assessment, "id = ?", assessmentID).Error; err != nil {
+		fmt.Println("DB error:", err)
 		c.JSON(http.StatusNotFound, dto.ErrorResponse{Error: "Assessment tidak ditemukan"})
 		return
 	}
@@ -46,23 +48,24 @@ func PredictMentalHealth(c *gin.Context) {
 	var answers dto.AssessmentAnswers
 	err := json.Unmarshal(assessment.Answers, &answers)
 	if err != nil {
+		fmt.Println("Unmarshal error:", err)
 		c.JSON(http.StatusInternalServerError, dto.ErrorResponse{Error: "Gagal decode data jawaban assessment"})
 		return
 	}
 
 	// Kirim data ke model Python
 	payload := map[string]interface{}{
-		"schizophrenia_share":     answers.SchizophreniaShare,
-		"anxiety_share":           answers.AnxietyShare,
-		"bipolar_share":           answers.BipolarShare,
-		"eating_disorder_share":   answers.EatingDisorderShare,
-		"DALYs":                   answers.DALYs,
-		"suicide_rate":            answers.SuicideRate,
-		"depression_dalys":        answers.DepressionDALYs,
-		"schizophrenia_dalys":     answers.SchizophreniaDALYs,
-		"bipolar_dalys":           answers.BipolarDALYs,
-		"eating_dalys":            answers.EatingDALYs,
-		"anxiety_dalys":           answers.AnxietyDALYs,
+		"schizophrenia_share":   answers.SchizophreniaShare,
+		"anxiety_share":         answers.AnxietyShare,
+		"bipolar_share":         answers.BipolarShare,
+		"eating_disorder_share": answers.EatingDisorderShare,
+		"DALYs":                 answers.DALYs,
+		"suicide_rate":          answers.SuicideRate,
+		"depression_dalys":      answers.DepressionDALYs,
+		"schizophrenia_dalys":   answers.SchizophreniaDALYs,
+		"bipolar_dalys":         answers.BipolarDALYs,
+		"eating_dalys":          answers.EatingDALYs,
+		"anxiety_dalys":         answers.AnxietyDALYs,
 	}
 
 	payloadBytes, err := json.Marshal(payload)
@@ -72,12 +75,17 @@ func PredictMentalHealth(c *gin.Context) {
 	}
 
 	client := &http.Client{Timeout: 5 * time.Second}
-	resp, err := client.Post("http://localhost:7000/predict", "application/json", bytes.NewBuffer(payloadBytes))
+	resp, err := client.Post("http://localhost:8000/predict", "application/json", bytes.NewBuffer(payloadBytes))
 	if err != nil {
+		fmt.Println("HTTP error:", err)
 		c.JSON(http.StatusInternalServerError, dto.ErrorResponse{Error: "Gagal menghubungi service prediksi"})
 		return
 	}
 	defer resp.Body.Close()
+
+	// Baca body sekali saja
+	bodyBytes, _ := io.ReadAll(resp.Body)
+	fmt.Println("ML response raw:", string(bodyBytes))
 
 	if resp.StatusCode != http.StatusOK {
 		c.JSON(http.StatusInternalServerError, dto.ErrorResponse{Error: "Service prediksi mengembalikan status error"})
@@ -88,8 +96,8 @@ func PredictMentalHealth(c *gin.Context) {
 		ResultLabel      string  `json:"resultLabel"`
 		ProbabilityScore float64 `json:"probabilityScore"`
 	}
-
-	if err := json.NewDecoder(resp.Body).Decode(&predictionResult); err != nil {
+	if err := json.Unmarshal(bodyBytes, &predictionResult); err != nil {
+		fmt.Println("Decode error:", err)
 		c.JSON(http.StatusInternalServerError, dto.ErrorResponse{Error: "Gagal membaca hasil prediksi"})
 		return
 	}
