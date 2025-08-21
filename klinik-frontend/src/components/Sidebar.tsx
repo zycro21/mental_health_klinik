@@ -11,7 +11,7 @@ const menuItems = [
   { name: 'Appointment', icon: <FaCalendarAlt />, href: '/dashboard/appointment' },
   { name: 'Assessment', icon: <FaBrain />, href: '/dashboard/assessment' },
   { name: 'Prediction', icon: <FaBrain />, href: '/dashboard/prediction' },
-  { name: 'Medical Record', icon: <FaNotesMedical />, href: '/dashboard/medical-record' },
+  { name: 'Medical Record', icon: <FaNotesMedical />, href: '/dashboard/mecrec' },
 ]
 
 export default function Sidebar() {
