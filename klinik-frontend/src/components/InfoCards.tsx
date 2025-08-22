@@ -3,9 +3,9 @@
 import { motion } from 'framer-motion'
 
 const cards = [
-  { title: '100+ Pasien Terdaftar', color: 'bg-green-100 text-green-900' },
-  { title: '50+ Appointment Aktif', color: 'bg-yellow-100 text-yellow-900' },
-  { title: '20+ Diagnosis Tercatat', color: 'bg-red-100 text-red-900' },
+  { title: '51 Pasien Terdaftar', color: 'bg-green-100 text-green-900' },
+  { title: '49 Appointment Aktif', color: 'bg-yellow-100 text-yellow-900' },
+  { title: '14 Diagnosis Tercatat', color: 'bg-red-100 text-red-900' },
 ]
 
 export default function InfoCards() {

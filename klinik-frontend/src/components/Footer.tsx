@@ -10,7 +10,7 @@ export default function Footer() {
       transition={{ delay: 0.4 }}
       className="text-center text-sm text-gray-500 py-4"
     >
-      &copy; {new Date().getFullYear()} Mental Klinik App
+      &copy; {new Date().getFullYear()} Mental Klinik Sidoarjo - DP 21
     </motion.footer>
   )
 }

@@ -16,6 +16,7 @@ const menuItems = [
 
 export default function Sidebar() {
   const [isOpen, setIsOpen] = useState(true)
+  const [logoClicked, setLogoClicked] = useState(false)
 
   return (
     <motion.aside
@@ -28,10 +29,27 @@ export default function Sidebar() {
     >
       {/* Header (Logo + Judul + Toggle) */}
       <div className="flex items-center justify-between px-4 py-4 border-b border-blue-200">
-        <div className="flex items-center space-x-3">
-          <FaClinicMedical className="text-2xl text-blue-600" />
-          {isOpen && <span className="text-lg font-bold">Mental Klinik</span>}
-        </div>
+        <Link
+          href="/"
+          className="flex items-center space-x-3 cursor-pointer group"
+          onClick={() => setLogoClicked(true)}
+        >
+          <FaClinicMedical
+            className={`text-2xl transition-colors duration-300 ${
+              logoClicked ? 'text-green-600' : 'text-blue-600 group-hover:text-green-500'
+            }`}
+          />
+          {isOpen && (
+            <span
+              className={`text-lg font-bold transition-colors duration-300 ${
+                logoClicked ? 'text-green-700' : 'text-blue-900 group-hover:text-green-700'
+              }`}
+            >
+              Mental Klinik
+            </span>
+          )}
+        </Link>
+
         <button
           onClick={() => setIsOpen(!isOpen)}
           className="text-xl text-blue-700 focus:outline-none"
