@@ -187,7 +187,6 @@ func GetMedicalRecordByID(c *gin.Context) {
 	c.JSON(http.StatusOK, response)
 }
 
-
 // UpdateMedicalRecord godoc
 // @Summary Update medical record by ID
 // @Description Update a medical record's patient, user, diagnosis, or treatment.
